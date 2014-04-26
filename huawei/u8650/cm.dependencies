@@ -1,0 +1,12 @@
+[
+ {
+   "repository": "android_kernel_huawei",
+   "target_path": "device/huawei/u8650/kernel"
+ }, {
+   "repository": "android_device_huawei_u8650",
+   "target_path": "device/huawei/u8650"
+ }, {
+   "repository": "android_vendor_huawei",
+   "target_path": "vendor/huawei"
+ }
+]
