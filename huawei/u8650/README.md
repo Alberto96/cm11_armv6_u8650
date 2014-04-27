@@ -6,5 +6,4 @@ cm11_armv6_u8650
 
 
 Bugs:
-WiFi
-Mount microSD
+WiFi, Mount microSD...... and other.
