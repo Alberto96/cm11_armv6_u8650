@@ -248,6 +248,7 @@ BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/huawei/u8650/recovery/recovery_
 BOARD_USE_CUSTOM_RECOVERY_FONT := "<font_7x16.h>"
 TARGET_PREBUILT_RECOVERY_KERNEL := device/huawei/u8650/recovery/kernel
 TARGET_RECOVERY_FSTAB := device/huawei/u8650/fstab.u8650
+BOARD_HAS_NO_SELECT_BUTTON := true
 
 # Kernel
 TARGET_KERNEL_SOURCE := device/huawei/u8650/kernel

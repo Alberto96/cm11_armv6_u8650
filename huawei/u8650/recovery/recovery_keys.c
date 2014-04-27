@@ -37,9 +37,9 @@ int device_handle_key(int key_code, int visible) {
                 if (ui_get_showing_back_button()) {
                     return SELECT_ITEM;
                 }
-               if (!get_allow_toggle_display() && ui_menu_level > 0) {
-                   return GO_BACK;
-               }
+                if (!get_allow_toggle_display() && ui_menu_level > 0) {
+                    return GO_BACK;
+                }
                 break;
             */
             //case KEY_LEFTBRACE:
@@ -50,25 +50,22 @@ int device_handle_key(int key_code, int visible) {
             //case KEY_SEND:
             case KEY_HOME:
             case KEY_POWER:
-               return SELECT_ITEM;
+                return SELECT_ITEM;
                
             //case KEY_END:
             //case KEY_BACKSPACE:
             //case KEY_SEARCH:
-              case KEY_BACK:
                 if (ui_get_showing_back_button()) {
-                   return SELECT_ITEM;
+                    return SELECT_ITEM;
                 }
                 if (!get_allow_toggle_display()) {
                     return GO_BACK;
                 }
-               //case KEY_158:
-               //case KEY_BACK:
+            case 158:
                     return GO_BACK;
         }
     }
      
     return NO_ACTION;
 }
-
 

@@ -9,6 +9,7 @@ ifeq ($(TARGET_DEVICE),u8650)
         $(LOCAL_PATH)/wpa_supplicant_8_lib/Android.mk \
         $(LOCAL_PATH)/libril/Android.mk \
         $(LOCAL_PATH)/bcmdhd_net_iface/Android.mk \
+        $(LOCAL_PATH)/recovery/Android.mk \
 #       $(LOCAL_PATH)/libcopybit/Android.mk \
 #       $(LOCAL_PATH)/libgralloc/Android.mk \
 #       $(LOCAL_PATH)/libopencorehw/Android.mk \
