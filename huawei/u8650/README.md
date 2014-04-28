@@ -4,3 +4,6 @@ Originally designed by marcnvidic (u8150) and Ivan (c8650) Changed, improved and
 
 cm11_armv6_u8650
 
+
+Bugs:
+WiFi, Mount microSD...... and other.
