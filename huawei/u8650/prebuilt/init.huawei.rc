@@ -18,16 +18,11 @@ on init
 #    mkdir /storage/sdcard0 0700 root root
 #    export EXTERNAL_STORAGE /storage/sdcard0
 
-    # sdcard
     mkdir /mnt/media_rw/sdcard0 0700 media_rw media_rw
     mkdir /storage/sdcard0 0700 root root
-
     symlink /storage/sdcard0 /mnt/sdcard
     symlink /storage/sdcard0 /sdcard
     export EXTERNAL_STORAGE /storage/sdcard0
-
-    # sd-ext
-    mkdir /sd-ext 0771 system system
     export SD_EXT_DIRECTORY /sd-ext
 
     # Add permissions for camera access
@@ -58,44 +53,59 @@ on fs
     mount yaffs2 mtd@cust /cust 
     mount yaffs2 mtd@cust /cust ro remount
 
-# DELETE FOR NEW Wifi KitKat ????
-service dhcp-service /system/bin/netcfg wlan0 dhcp
-    class main
-    oneshot
+# DELETE FOR NEW Wifi KitKat
+#service dhcp-service /system/bin/netcfg wlan0 dhcp
+#    class main
+#    oneshot
 
-on property:dev.bootcomplete=1
-    stop dhcp-service
-    start dhcp-service
+#on property:dev.bootcomplete=1
+#    stop dhcp-service
+#    start dhcp-service
 
 ################
-## 6: POST-FS ##
+## 4: POST-FS ##
 ################
 on post-fs
 
     # nv
-    mkdir /data/nv
-    chown system system /data/nv
-    chmod 0711 /data/nv
+    #mkdir /data/nv
+    #chown system system /data/nv
+    #chmod 0711 /data/nv
 
     mkdir /data/local/download 0771 system cache
     mkdir /cache/download 0771 system cache
 
     # wifi
-    chmod 0777 /data/misc/wifi/config_mac
-    mkdir /data/audioprop 0777 system system
-    mkdir /data/misc/wifi/sockets 0770 wifi wifi
-    setprop wifi.supplicant_scan_interval 20
-    setprop wifi.interface wlan0
-    mkdir /data/misc/dhcp 0777 system system
+    #chmod 0777 /data/misc/wifi/config_mac
+    #mkdir /data/audioprop 0777 system system
+    #mkdir /data/misc/wifi/sockets 0770 wifi wifi
+    #setprop wifi.supplicant_scan_interval 20
+    #setprop wifi.interface eth0
+    #mkdir /data/misc/dhcp 0777 system system
 
 #####################
-## 7: POST-FS-DATA ##
+## 5: POST-FS-DATA ##
 #####################
 on post-fs-data
+
+    # cutils/installd wants a media dir
+    mkdir /data/media 0770 system system
+
     # Create the directories used by the Wireless subsystem
     mkdir /data/misc/wifi 0770 wifi wifi
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
+    chmod 0770 /data/misc/wifi/sockets
     mkdir /data/misc/wifi/wpa_supplicant 0770 wifi wifi
+    mkdir /data/misc/wifi/hostapd 0770 wifi wifi
+
+    # Take from msm7x27a
+    # Create the directories used by the Wireless subsystem
+    #mkdir /data/misc/wifi 0770 wifi wifi
+    #mkdir /data/misc/wifi/load 0770 wifi wifi
+    #mkdir /data/misc/wifi/sockets 0770 wifi wifi
+    #mkdir /data/misc/wifi/wpa_supplicant 0770 wifi wifi
+    #mkdir /data/misc/dhcp 0770 dhcp dhcp
+
     mkdir /data/misc/dhcp 0770 dhcp dhcp
     chown dhcp dhcp /data/misc/dhcp
 
@@ -108,7 +118,7 @@ on post-fs-data
     chmod 0771 /persist
 
     #Create the symlink to qcn wpa_supplicant folder for ar6000 wpa_supplicant
-    mkdir /data/system 0775 system system
+    #mkdir /data/system 0775 system system
     #symlink /data/misc/wifi/wpa_supplicant /data/system/wpa_supplicant
 
     #Create directories for wiper services
@@ -142,7 +152,7 @@ on post-fs-data
     setprop vold.post_fs_data_done 1
 
 ###################
-## 8: EARLY-BOOT ##
+## 6: EARLY-BOOT ##
 ###################
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
@@ -153,7 +163,7 @@ on boot-pause
     exec system/bin/battery_charging
 
 #############
-## 9: BOOT ##
+## 7: BOOT ##
 #############
 
 on boot
@@ -227,6 +237,13 @@ on boot
     chmod 0777 /sys/kernel/logger/log_radio/enable
     chmod 0777 /sys/kernel/logger/log_radio/priority
 
+
+ # Sdcard polling
+    chmod 0664 /sys/devices/platform/msm_sdcc.1/polling
+    chmod 0664 /sys/devices/platform/msm_sdcc.2/polling
+    chmod 0664 /sys/devices/platform/msm_sdcc.3/polling
+    chmod 0664 /sys/devices/platform/msm_sdcc.4/polling
+
     chown system system /sys/module/g_android/parameters/product_id
     chown system system /sys/devices/platform/msm_sdcc.1/polling
     chown system system /sys/devices/platform/msm_sdcc.2/polling
@@ -241,18 +258,29 @@ on boot
     chown system sdcard_rw /sys/touch_screen/update_firmware
 
 
+    #Create QMUX deamon socket area
+    mkdir /dev/socket/qmux_radio 0770 radio radio
+    chmod 2770 /dev/socket/qmux_radio
+    mkdir /dev/socket/qmux_audio 0770 media audio
+    chmod 2770 /dev/socket/qmux_audio
+    mkdir /dev/socket/qmux_bluetooth 0770 bluetooth bluetooth
+    chmod 2770 /dev/socket/qmux_bluetooth
+    mkdir /dev/socket/qmux_gps 0770 gps gps
+    chmod 2770 /dev/socket/qmux_gps
+
+
 # Temporary hack to prevent framebuffer flicker
     chmod 0777 /sys/class/graphics/fb0/state
     write /sys/class/graphics/fb0/state 1
 
 
 ########################
-## 10: BOOT COMPLETED ##
+## 8: BOOT COMPLETED ##
 ########################
 
 
 #############################################################################
-### 4: S E R V I C E S                                                        ##
+### 9: S E R V I C E S                                                        ##
 #############################################################################
 
 
@@ -301,23 +329,34 @@ service hci_qcomm_init /system/bin/log -t qcom-bluetooth -p i "hci_qcomm_init se
     oneshot    
     
 # OLD WPA SETTINGS
-service wpa_supplicant /system/bin/logwrapper /system/bin/wpa_supplicant -Dwext -ieth0 -c/data/misc/wifi/wpa_supplicant.conf -dd
+#service wpa_supplicant /system/bin/logwrapper /system/bin/wpa_supplicant -Dwext -ieth0 -c/data/misc/wifi/wpa_supplicant.conf -dd
+    #class main
+    #user root
+    #group wifi inet
+    #socket wpa_eth0 dgram 660 wifi wifi
+    #disabled
+    #oneshot
+
+# NEW WPA SETTINGS 1
+#service wpa_supplicant /system/bin/wpa_supplicant \
+#    -ieth0 -Dnl80211,wext -c/data/misc/wifi/wpa_supplicant.conf -dd \
+#    -e/data/misc/wifi/entropy.bin \
+#    -O/data/misc/wifi/sockets -g@android:wpa_eth0
+#    class main
+#    socket wpa_eth0 dgram 660 wifi wifi
+#    disabled
+#    oneshot
+
+
+# NEW WPA SETTINGS 2
+service wpa_supplicant /system/bin/wpa_supplicant \
+    -Dwext -ieth0 -c/data/misc/wifi/wpa_supplicant.conf -dd \
+    -e/data/misc/wifi/entropy.bin \
+    -O/data/misc/wifi/sockets -g@android:wpa_eth0
     class main
-    user root
-    group wifi inet
     socket wpa_eth0 dgram 660 wifi wifi
     disabled
     oneshot
-
-# NEW WPA SETTINGS ?????
-#service wpa_supplicant /system/bin/logwrapper /system/bin/wpa_supplicant \
-    #-ieth0 -Dnl80211,wext -c/data/misc/wifi/wpa_supplicant.conf -dd \
-    #-e/data/misc/wifi/entropy.bin \
-    #-O/data/misc/wifi/sockets -g@android:wpa_ieth0
-    #class main
-    #socket wpa_ieth0 dgram 660 wifi wifi
-    #disabled
-    #oneshot
 
 #Here added only -BKL to -ABKL
 service dhcpcd_eth0 /system/bin/dhcpcd -ABKL
@@ -334,7 +373,8 @@ service wiperiface /system/bin/wiperiface
     class main
     user location
     group qcom_oncrpc
-    oneshot    
+    oneshot   
+ 
 service fm_dl /system/bin/sh /system/etc/init.qcom.fm.sh
     class main
     user system
@@ -366,11 +406,12 @@ chmod 0664 /dev/compass_aot
 chmod 0666 /dev/compass_dev
 chmod 777 /dev/oncrpc*
 
+
 service fuse_sdcard0 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard0 /storage/sdcard0
     class late_start
     disabled
 
-service bugreport /system/bin/dumpstate -d -v -o /storage/sdcard0/bugreports/bugreport
+service bugreport /system/bin/dumpstate -d -v -o /storage/sdcard2/bugreports/bugreport
 #   Triggered by the KEY_VOLUME_DOWN+KEY_MENU keycodes
     keycodes 114 139
     class late_start
