@@ -411,7 +411,7 @@ service fuse_sdcard0 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard0
     class late_start
     disabled
 
-service bugreport /system/bin/dumpstate -d -v -o /storage/sdcard2/bugreports/bugreport
+service bugreport /system/bin/dumpstate -d -v -o /storage/sdcard0/bugreports/bugreport
 #   Triggered by the KEY_VOLUME_DOWN+KEY_MENU keycodes
     keycodes 114 139
     class late_start
