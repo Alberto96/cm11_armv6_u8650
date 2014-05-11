@@ -7,18 +7,17 @@ system			/system		yaffs2	defaults		recoveryonly
 boot			/boot		mtd	defaults		recoveryonly
 misc			/misc		mtd	defaults		recoveryonly
 recovery		/recovery	mtd	defaults		recoveryonly
-/dev/block/mmcblk0p1    /sdcard         auto    defaults                recoveryonly
-/dev/block/mmcblk0p2    /sd-ext         auto    defaults                recoveryonly
+/dev/block/mmcblk0p1	/sdcard		vfat	defaults		recoveryonly
+/dev/block/mmcblk0p2	/sd-ext		auto	defaults		recoveryonly
 
 /devices/platform/msm_sdcc.1/mmc_host/mmc0	auto	vfat	defaults	voldmanaged=sdcard0:auto,noemulatedsd
 /dev/block/zram0				none	swap	defaults	zramsize=50331648,swapprio=1
 
-
+# Old vold.fstab
 #dev_mount sdcard2 /mnt/sdcard auto /devices/platform/goldfish_mmc.0 /devices/platform/msm_sdcc.1/mmc_host/mmc0
 #dev_mount sdcard1 /mnt/sdcard auto /devices/virtual/mtd/mtd7/mtdblock7
 
-
-
+# Old mount point
 # mount point   fstype      device                  [device2]
 #/boot       	mtd         boot
 #/cache      	yaffs2      cache
@@ -40,5 +39,6 @@ recovery		/recovery	mtd	defaults		recoveryonly
 #mtd6: 0a0a0000 00020000 "userdata"
 #mtd7: 01400000 00020000 "userdata2"
 #mtd8: 01400000 00020000 "cust"
+
 
 

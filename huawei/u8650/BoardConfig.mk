@@ -23,19 +23,17 @@
 # WARNING: This line must come *before* including the proprietary
 # variant, so that it gets overwritten by the parent (which goes
 # against the traditional rules of inheritance).
-
+# The proprietary variant sets USE_CAMERA_STUB := false, this way
+# we use the camera stub when the vendor tree isn't present, and
+# the true camera library when the vendor tree is available.
 # Camera
-USE_CAMERA_STUB := true
-
-TARGET_DISABLE_ARM_PIE          := true
-BOARD_NEEDS_MEMORYHEAPPMEM      := true
-
+USE_CAMERA_STUB := false
 
 # inherit from the proprietary version
 -include vendor/huawei/u8650/BoardConfigVendor.mk
 
 #TARGET_SPECIFIC_HEADER_PATH := device/huawei/u8650/include
-TARGET_SPECIFIC_HEADER_PATH += device/huawei/c8650/include
+TARGET_SPECIFIC_HEADER_PATH += device/huawei/u8650/include
 
 # ARMv6-compatible processor rev 5 (v6l)
 ARCH_ARM_HAVE_VFP := true
@@ -65,12 +63,15 @@ BOARD_HAVE_BLUETOOTH_BCM := true
 BOARD_BLUEDROID_VENDOR_CONF := device/huawei/u8650/bluetooth/libbt_hwi.txt
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/huawei/u8650/bluetooth
 
+TARGET_DISABLE_ARM_PIE          := true
+BOARD_NEEDS_MEMORYHEAPPMEM      := true
+
 #Fm radio
 BOARD_HAVE_FM_RADIO := true
 BOARD_FM_DEVICE := bcm4329
 BOARD_GLOBAL_CFLAGS += -DHAVE_FM_RADIO
 #BOARD_VENDOR_QCOM_AMSS_VERSION := 4735
-#BOARD_VENDOR_USE_AKMD := akm8975
+BOARD_VENDOR_USE_AKMD := akm8975
 #BOARD_USE_NASTY_PTHREAD_CREATE_HACK := true
 
 # GPS OLD
@@ -94,7 +95,6 @@ TARGET_PREBUILT_LIBCAMERA := false
 COMMON_GLOBAL_CFLAGS += -DBINDER_COMPAT
 COMMON_GLOBAL_CFLAGS += -DNEEDS_VECTORIMPL_SYMBOLS
 
-
 # Browser
 WITH_JIT := true
 ENABLE_JSC_JIT := true
@@ -105,36 +105,35 @@ TARGET_WEBKIT_USE_MORE_MEMORY := true
 # Webkit
 ENABLE_WEBGL := true
 
-
 #RIL
 BOARD_PROVIDES_LIBRIL := true
 
 # Try to get radio working (Legacy ril) RomzesRover
 # Enable gsm and network search
-COMMON_GLOBAL_CFLAGS += -DFORCE_RILD_AS_ROOT # Not sure if this is needed
-BOARD_FORCE_RILD_AS_ROOT := true
-BOARD_USES_LEGACY_RIL := true
+#COMMON_GLOBAL_CFLAGS += -DFORCE_RILD_AS_ROOT # Not sure if this is needed
+#BOARD_FORCE_RILD_AS_ROOT := true
+#BOARD_USES_LEGACY_RIL := true
 
 #Mass storage
-#BOARD_DATA_DEVICE := /dev/block/mtdblock6  
-#BOARD_DATA_FILESYSTEM := auto  	
-#BOARD_DATA_FILESYSTEM_OPTIONS := rw	
-#BOARD_SYSTEM_DEVICE := /dev/block/mtdblock5
-#BOARD_SYSTEM_FILESYSTEM := auto
-#BOARD_SYSTEM_FILESYSTEM_OPTIONS := rw
-#BOARD_CACHE_DEVICE := /dev/block/mtdblock4
-#BOARD_CACHE_FILESYSTEM := auto
-#BOARD_CACHE_FILESYSTEM_OPTIONS := rw
-##BOARD_HAS_SDCARD_INTERNAL := true
-##BOARD_SDCARD_DEVICE_INTERNAL := /dev/block/vold/179:1
-##BOARD_SDEXT_DEVICE := /dev/block/vold/179:2
-#BOARD_USE_USB_MASS_STORAGE_SWITCH := true
-#TARGET_USE_CUSTOM_SECOND_LUN_NUM := 2
-#TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/usb_mass_storage/lun0/file
-TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/usb_mass_storage/lun
-BOARD_UMS_LUNFILE := "/sys/devices/platform/usb_mass_storage/lun0/file"
+BOARD_DATA_DEVICE := /dev/block/mtdblock6  
+BOARD_DATA_FILESYSTEM := auto  	
+BOARD_DATA_FILESYSTEM_OPTIONS := rw	
+BOARD_SYSTEM_DEVICE := /dev/block/mtdblock5
+BOARD_SYSTEM_FILESYSTEM := auto
+BOARD_SYSTEM_FILESYSTEM_OPTIONS := rw
+BOARD_CACHE_DEVICE := /dev/block/mtdblock4
+BOARD_CACHE_FILESYSTEM := auto
+BOARD_CACHE_FILESYSTEM_OPTIONS := rw
+BOARD_SDEXT_DEVICE := /dev/block/vold/179:1
+BOARD_USE_USB_MASS_STORAGE_SWITCH := true
+TARGET_USE_CUSTOM_SECOND_LUN_NUM := 2
+#Try Nexus One Passion path.....
+TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/usb_mass_storage/lun0/file
+#BOARD_UMS_LUNFILE := "/sys/devices/platform/usb_mass_storage/lun0/file"
+#BOARD_UMS_LUNFILE := sys/class/android_usb/android%d/f_mass_storage/lun/file
 
-
+# Try Try Try try.........
+#BOARD_CUSTOM_USB_CONTROLLER := ../../device/huawei/u8650/prebuilt/UsbController.cpp
 
 # ICS Stuff 
 BOARD_USE_LEGACY_TOUCHSCREEN := true
@@ -188,7 +187,7 @@ TARGET_SYSTEMIMAGE_USE_SQUISHER := true
 
 ## Minimal fonts
 SMALLER_FONT_FOOTPRINT := true
-MINIMAL_FONT_FOOTPRINT := true
+#MINIMAL_FONT_FOOTPRINT := true
 
 # CPU
 TARGET_FORCE_CPU_UPLOAD := true
@@ -228,7 +227,7 @@ ENABLE_WEBGL := true
 
 # WiFI
 #WPA_BUILD_SUPPLICANT             := true
-#USE_LEGACY_SOFTAP                := true
+USE_LEGACY_SOFTAP                := true
 BOARD_WPA_SUPPLICANT_DRIVER      := WEXT
 WPA_SUPPLICANT_VERSION           := VER_0_8_X
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_wext
@@ -247,14 +246,16 @@ P500_SPEAKER_IN_CALL_FIX := true
 BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/huawei/u8650/recovery/recovery_keys.c
 BOARD_USE_CUSTOM_RECOVERY_FONT := "<font_7x16.h>"
 TARGET_PREBUILT_RECOVERY_KERNEL := device/huawei/u8650/recovery/kernel
-TARGET_RECOVERY_FSTAB := device/huawei/u8650/fstab.u8650
+TARGET_RECOVERY_FSTAB := device/huawei/u8650/fstab.huawei
 BOARD_HAS_NO_SELECT_BUTTON := true
+## Allow compatibility with older recoveries
+SKIP_SET_METADATA := true
 
 # Kernel
 TARGET_KERNEL_SOURCE := device/huawei/u8650/kernel
 TARGET_KERNEL_CONFIG := u8650_Lucky_defconfig
 TARGET_SPECIFIC_HEADER_PATH := device/huawei/u8650/include
-#TARGET_KERNEL_CUSTOM_TOOLCHAIN := arm-eabi-4.4.3
+TARGET_KERNEL_CUSTOM_TOOLCHAIN := arm-eabi-4.4.3
 #FULL_KERNEL_BUILD := false
 #TARGET_PREBUILT_KERNEL := device/huawei/u8650/prebuilt/kernel
 BOARD_KERNEL_BASE := 0x10200000

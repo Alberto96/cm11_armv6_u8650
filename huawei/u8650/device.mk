@@ -107,10 +107,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # SELinux - we're not ready for enforcing mode yet
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.boot.selinux=permissive
+      ro.boot.selinux=permissive
 
 BOARD_SEPOLICY_DIRS += \
-     device/huawei/u8650/sepolicy
+    device/huawei/u8650/sepolicy
 
 BOARD_SEPOLICY_UNION += \
     file_contexts
@@ -176,14 +176,17 @@ PRODUCT_COPY_FILES += \
     device/huawei/u8650/prebuilt/etc/init.qcom.sdio.sh:system/etc/init.qcom.sdio.sh \
     device/huawei/u8650/prebuilt/etc/apns-conf.xml:system/etc/apns-conf.xml
 
-# Init files
+# Init files Ramdisk
 PRODUCT_COPY_FILES += \
     device/huawei/u8650/prebuilt/init.huawei.rc:root/init.huawei.rc \
     device/huawei/u8650/prebuilt/init.swapart.rc:root/init.swapart.rc \
     device/huawei/u8650/prebuilt/ueventd.huawei.rc:root/ueventd.huawei.rc \
     device/huawei/u8650/prebuilt/init.qcom.bluetooth.rc:root/init.qcom.bluetooth.rc \
-    device/huawei/u8650/prebuilt/ueventd.qcom.rc:root/ueventd.qcom.rc \
-    device/huawei/u8650/prebuilt/init.rc:root/init.rc
+    device/huawei/u8650/prebuilt/init.huawei.usb.rc:root/init.huawei.usb.rc \
+    device/huawei/u8650/prebuilt/ueventd.qcom.rc:root/ueventd.qcom.rc 
+
+
+#   device/huawei/u8650/prebuilt/init.rc:root/init.rc not needed
 
 # u8650 bluetooth vendor configuration
 PRODUCT_COPY_FILES += \
@@ -192,14 +195,11 @@ PRODUCT_COPY_FILES += \
 
 # u8650 init
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/fstab.u8650:root/fstab.u8650
+    $(LOCAL_PATH)/fstab.huawei:root/fstab.huawei
 
-# Init files
-#PRODUCT_COPY_FILES += \
-#       device/huawei/u8650/prebuilt/root/init:root/init \
-#      device/huawei/u8650/prebuilt/root/init.huawei.rc:root/init.huawei.rc \
-#     device/huawei/u8650/prebuilt/root/init.rc:root/init.rc \
-#    device/huawei/u8650/prebuilt/root/ueventd.rc:root/ueventd.rc
+# USBMS for recovery
+PRODUCT_COPY_FILES += \
+    device/huawei/u8650/recovery/init.recovery.msm7x27.rc:root/init.recovery.$(CM_BUILD).rc
 
 # Wi-Fi releated
 PRODUCT_COPY_FILES += \
@@ -236,12 +236,13 @@ PRODUCT_COPY_FILES += \
 ADDITIONAL_DEFAULT_PROPERTIES += \
     ro.debuggable=1 \
     ro.secure=0 \
+    ro.adb.secure=1 \
     ro.allow.mock.location=0 \
     persist.service.adb.enable=1
 
 # set default USB configuration
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp
+    persist.sys.usb.config=mass_storage
 
 # Default heap settings for 512mb device
 $(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
@@ -302,8 +303,9 @@ $(call inherit-product, vendor/google/gapps_armv6_tiny.mk)
 # Common assets
 PRODUCT_LOCALES += mdpi
 PRODUCT_AAPT_CONFIG := normal mdpi hdpi
-PRODUCT_LOCALES := en_US en_IN fr_FR it_IT es_ES et_EE de_DE nl_NL cs_CZ pl_PL ja_JP \
-    zh_TW zh_CN zh_HK ru_RU ko_KR nb_NO es_US da_DK el_GR tr_TR pt_PT pt_BR rm_CH sv_SE \
-    bg_BG ca_ES en_GB fi_FI hr_HR hu_HU in_ID lt_LT lv_LV ro_RO sk_SK sl_SI sr_RS uk_UA \
-    vi_VN tl_PH sw_TZ ms_MY af_ZA zu_ZA en_XA ar_XB fr_CA mn_MN az_AZ
+PRODUCT_LOCALES := en_US en_IN fr_FR it_IT es_ES et_EE de_DE nl_NL cs_CZ \
+    pl_PL ja_JP zh_TW zh_CN zh_HK ru_RU ko_KR nb_NO es_US da_DK el_GR tr_TR \
+    pt_PT pt_BR rm_CH sv_SE bg_BG ca_ES en_GB fi_FI hr_HR hu_HU in_ID iw_IL \
+    lt_LT lv_LV ro_RO sk_SK sl_SI sr_RS uk_UA vi_VN tl_PH ar_EG fa_IR sw_TZ \
+    ms_MY af_ZA zu_ZA en_XA ar_XB fr_CA mn_MN hy_AM az_AZ ka_GE
 

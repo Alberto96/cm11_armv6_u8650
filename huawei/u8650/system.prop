@@ -95,8 +95,13 @@ com.qc.hardware=true
 
 # USB
 #persist.sys.usb.config=mass_storage,adb
-sys.usb.config=mass_storage
-persist.service.adb.enable=1
+#sys.usb.config=mass_storage
+#persist.service.adb.enable=1
+
+## DeepSleep/Power ##
+ro.config.hw_quickpoweron=true
+pm.sleep_mode=1
+ro.ril.fast.dormancy.rule=0
 
 # System
 dalvik.vm.execution-mode=int:jit
@@ -122,7 +127,7 @@ ro.bt.bdaddr_path=/data/misc/bd_addr
 
 #TRUE= We not have trasparent status bar and other, but the rom is more fast
 #FALSE= We have Trasparent status bar, but rom maybe slow
-ro.config.low_ram=true
+ro.config.low_ram=false
 
 persist.sys.strictmode.visual=0
 persist.sys.strictmode.disable=1 
