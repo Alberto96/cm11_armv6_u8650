@@ -37,7 +37,3 @@ persist.service.adb.enable=1
 
 # System
 ro.vold.umsdirtyratio=20
-
-#TRUE= We not have trasparent status bar and other, but the rom is more fast
-#FALSE= We have Trasparent status bar, but rom maybe slow
-ro.config.low_ram=false
