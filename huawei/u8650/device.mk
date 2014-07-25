@@ -28,18 +28,6 @@ PRODUCT_PACKAGES += \
     gralloc.msm7x27 \
     copybit.msm7x27
 
-
-# OpenSSH
-PRODUCT_PACKAGES += \
-    scp \
-    sftp \
-    ssh \
-    sshd \
-    sshd_config \
-    ssh-keygen \
-    start-ssh
-
-
 # Graphics
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=131072 \
@@ -91,7 +79,7 @@ PRODUCT_PACKAGES += \
 
 # Camera
 PRODUCT_PACKAGES += \
-        camera.msm7x27
+	camera.msm7x27
 
 # Camcorder
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -115,11 +103,6 @@ BOARD_SEPOLICY_DIRS += \
 BOARD_SEPOLICY_UNION += \
     file_contexts
 
-# Dalvik
-PRODUCT_PROPERTY_OVERRIDES += \
-    dalvik.vm.heaptargetutilization=0.25 \
-    dalvik.vm.jit.codecachesize=0
-
 # Memory
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.config.low_ram=true
@@ -129,26 +112,10 @@ PRODUCT_PACKAGES += \
     lights.msm7x27 \
     librpc \
     gps.default
-
-# Other
-PRODUCT_PACKAGES += \
-    dexpreopt
-
-# Live Wallpapers
-PRODUCT_COPY_FILES += packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:/system/etc/permissions/android.software.live_wallpaper.xml
-PRODUCT_PACKAGES += \
-    LiveWallpapers \
-    LiveWallpapersPicker \
-    VisualizationWallpapers \
-    librs_jni
-
-#PRODUCT_PROPERTY_OVERRIDES += \
-   # wifi.ap.interface=wl0.1
-
+    
 # Misc
 PRODUCT_PACKAGES += \
-    com.android.future.usb.accessory \
-    libnetcmdiface
+    com.android.future.usb.accessory
 
 # Hardware permissions
 PRODUCT_COPY_FILES += \
@@ -185,13 +152,9 @@ PRODUCT_COPY_FILES += \
     device/huawei/u8650/prebuilt/init.huawei.usb.rc:root/init.huawei.usb.rc \
     device/huawei/u8650/prebuilt/ueventd.qcom.rc:root/ueventd.qcom.rc 
 
-
-#   device/huawei/u8650/prebuilt/init.rc:root/init.rc not needed
-
 # u8650 bluetooth vendor configuration
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/bluetooth/bt_vendor.conf:system/etc/bluetooth/bt_vendor.conf
-
 
 # u8650 init
 PRODUCT_COPY_FILES += \
@@ -237,17 +200,11 @@ ADDITIONAL_DEFAULT_PROPERTIES += \
     ro.debuggable=1 \
     ro.secure=0 \
     ro.adb.secure=1 \
-    ro.allow.mock.location=0 \
-    persist.service.adb.enable=1
-
-# set default USB configuration
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mass_storage
+    ro.allow.mock.location=0
 
 # Default heap settings for 512mb device
-$(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
+$(call inherit-product, frameworks/native/build/phone-hdpi-dalvik-heap.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
-
 
 # Ensure that /cache is never used for deodexing
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -300,12 +257,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Install/Uninstall google apps
 $(call inherit-product, vendor/google/gapps_armv6_tiny.mk)
 
+$(call inherit-product, device/mdpi-common/mdpi.mk)
+
 # Common assets
-PRODUCT_LOCALES += mdpi
-PRODUCT_AAPT_CONFIG := normal mdpi hdpi
-PRODUCT_LOCALES := en_US en_IN fr_FR it_IT es_ES et_EE de_DE nl_NL cs_CZ \
-    pl_PL ja_JP zh_TW zh_CN zh_HK ru_RU ko_KR nb_NO es_US da_DK el_GR tr_TR \
-    pt_PT pt_BR rm_CH sv_SE bg_BG ca_ES en_GB fi_FI hr_HR hu_HU in_ID iw_IL \
-    lt_LT lv_LV ro_RO sk_SK sl_SI sr_RS uk_UA vi_VN tl_PH ar_EG fa_IR sw_TZ \
-    ms_MY af_ZA zu_ZA en_XA ar_XB fr_CA mn_MN hy_AM az_AZ ka_GE
+PRODUCT_AAPT_CONFIG := normal mdpi
+PRODUCT_AAPT_PREF_CONFIG := mdpi
 
