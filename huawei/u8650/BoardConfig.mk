@@ -281,3 +281,6 @@ BOARD_FLASH_BLOCK_SIZE := 131072
 
 ## TEMPORARY HACK: skip building external/chromium_org/
 PRODUCT_PREBUILT_WEBVIEWCHROMIUM := yes
+
+# Releasetools extras
+TARGET_OTA_EXTRAS_FILE := device/huawei/u8650/releasetools-extras.txt
