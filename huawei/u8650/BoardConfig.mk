@@ -232,7 +232,6 @@ BOARD_WPA_SUPPLICANT_DRIVER      := WEXT
 WPA_SUPPLICANT_VERSION           := VER_0_8_X
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_wext
 BOARD_WLAN_DEVICE                := bcm4329
-BOARD_WEXT_NO_COMBO_SCAN         := true
 WIFI_BAND                        := 802_11_ABG
 WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/dhd.ko"
 WIFI_DRIVER_FW_PATH_STA          := "/system/etc/firmware.bin"
